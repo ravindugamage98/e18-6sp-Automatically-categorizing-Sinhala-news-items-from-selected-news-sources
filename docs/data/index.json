@@ -1,0 +1,27 @@
+{
+    "title": "Automatically categorizing Sinhala news items from selected news sources",
+    "team": [
+        {
+            "name": "Dharmarathna N.S.",
+            "email": "e18077@eng.pdn.ac.lk",
+            "eNumber": "E/18/077"
+        },
+        {
+            "name": "Mihiranga G.D.R.",
+            "email": "e18224@eng.pdn.ac.lk",
+            "eNumber": "E/18/224"
+        },
+        {
+            "name": "Mudalige D.H.",
+            "email": "e18227@eng.pdn.ac.lk",
+            "eNumber": "E/18/227"
+        }
+    ],
+    "supervisors": [
+        {
+            "name": "Mr. Sampath Deegalla",
+            "email": "sampath@eng.pdn.ac.lk"
+        }
+    ],
+    "tags": ["Machine Learning", "NLP", "News Categorizing"]
+}

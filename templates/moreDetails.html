@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>News Table</h1>
+    </header>
+    <div class="container">
+        <label for="categoryFilter">Filter by Predicted Category:</label>
+        <select id="categoryFilter">
+            <option value="all">All</option>
+            <option value="international">International</option>
+            <option value="business">Business</option>
+            <option value="sport">Sport</option>
+        </select>
+        <span style="margin-left: auto;">Overall Accuracy: {{ data.accuracyPcntg }}%</span>
+        <table id="newsTable">
+            <thead>
+                <tr>
+                    <th>News Text</th>
+                    <th>Predicted Category</th>
+                    <th>Actual Category</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const categoryFilter = document.getElementById('categoryFilter');
+        const newsTable = document.getElementById('newsTable');
+        
+        categoryFilter.addEventListener('change', filterNews);
+
+        function filterNews() {
+            const selectedCategory = categoryFilter.value;
+            const rows = newsTable.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                const category = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                if (selectedCategory === 'all' || category === selectedCategory) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Function to populate the table rows with data
+        function populateTable(data) {
+            const tbody = newsTable.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            for (let i = data.news.length-1; i >= 0; i--) {
+                const newsText = data.news[i];
+                const predictedCategory = data.predictions[i];
+                const actualCategory = data.actualCategory[i];
+
+                const row = document.createElement('tr');
+                const newsCell = document.createElement('td');
+                const predictedCategoryCell = document.createElement('td');
+                const actualCategoryCell = document.createElement('td');
+
+                newsCell.textContent = newsText;
+                predictedCategoryCell.textContent = predictedCategory;
+                actualCategoryCell.textContent = actualCategory;
+
+                row.appendChild(newsCell);
+                row.appendChild(predictedCategoryCell);
+                row.appendChild(actualCategoryCell);
+
+                // Check if predicted category doesn't match actual category
+                if (predictedCategory !== actualCategory) {
+                    // Add a red background to the row
+                    row.style.backgroundColor = 'red';
+                    row.style.color = 'white'; // Set text color to white for better readability
+                }
+
+                tbody.appendChild(row);
+            }
+        }
+        const dataObject = {{ data|tojson|safe }};
+        // Initial population of the table
+        populateTable(dataObject);
+    </script>
+</body>
+</html>
